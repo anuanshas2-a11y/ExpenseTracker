@@ -10,6 +10,7 @@ from expense.models import Expenses
 from rest_framework.views import APIView
 from django.db.models import Sum
 from django.utils import timezone
+from expense.permissions import IsOwner
 # Create your views here.
 
 class SignUpViewSet(ViewSet):
@@ -23,7 +24,8 @@ class SignUpViewSet(ViewSet):
 
 class ExpenseView(ViewSet):
     authentication_classes=[TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+    # permission_classes=[IsAuthenticated]
+    permission_classes=[IsOwner]
     def create(self,request):
         dser=ExpenseSerializer(data=request.data)
         if dser.is_valid():
@@ -58,7 +60,8 @@ class ExpenseView(ViewSet):
 
 class ExpenseSummeryView(APIView):
     authentication_classes=[TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+    # permission_classes=[IsAuthenticated]
+    permission_classes=[IsOwner]
     def get(self,request):
         cur_date=timezone.now()
         cur_month=cur_date.month
